@@ -2,13 +2,15 @@ import { SpaceParallaxBackground } from "@/components/SpaceParallaxBackground";
 import type { SVGProps } from "react";
 import { useEffect, useRef, useState } from "react";
 import cohortfinderThumb from "./assets/cohortfinder.png";
-import headshot from "./assets/headshot.jpeg";
+import headshot from "./assets/headshot.png";
 import mandarinThumb from "./assets/mandarin.png";
 import omnichordDemoVideo from "./assets/omnichord_demo.mp4";
 import wikidashThumb from "./assets/wikidash.png";
 
 const LINKEDIN_URL = "https://www.linkedin.com/in/georgia-martinez-5bb4a8197/";
 const GITHUB_URL = "https://github.com/georgia-martinez";
+/** PDF in `public/` (e.g. `public/resume.pdf`) */
+const RESUME_URL = "/resume.pdf";
 
 /** Returns embeddable video id for youtube.com / youtu.be URLs, else null */
 function youtubeVideoIdFromUrl(url: string): string | null {
@@ -134,6 +136,14 @@ const NAV_ITEMS = [
 /** Floating pill — glass on void; ion accent on hover */
 const NAV_PILL_LINK =
     "inline-flex shrink-0 items-center rounded-full px-4 py-2 text-sm font-medium text-zinc-200 transition-colors hover:bg-white/10 hover:text-ion-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ion-400 sm:px-5";
+
+/** LinkedIn + GitHub — circular icons; translucent cyan hover */
+const HERO_SOCIAL_ICON_LINK =
+    "flex size-14 shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/8 text-zinc-100 shadow-lg transition-all duration-200 hover:border-github-highlight hover:bg-[rgba(118,209,225,0.22)] hover:text-github-highlight hover:backdrop-blur-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-github-highlight";
+
+/** Resume — pill (same hover language as icons), aligned height */
+const HERO_RESUME_LINK =
+    "inline-flex h-14 shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/8 px-6 text-sm font-semibold tracking-tight text-zinc-100 shadow-lg transition-all duration-200 hover:border-github-highlight hover:bg-[rgba(118,209,225,0.22)] hover:text-github-highlight hover:backdrop-blur-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-github-highlight sm:px-7 sm:text-base";
 
 function LinkedInIcon(props: SVGProps<SVGSVGElement>) {
     return (
@@ -355,48 +365,58 @@ function App() {
             <main className="relative z-10 w-full">
                 <section
                     id="top"
-                    className="hero-intro flex min-h-svh flex-col items-center gap-10 px-6 pt-20 text-center sm:gap-12 sm:pt-24"
+                    className="hero-intro flex min-h-svh flex-col px-6 pt-[max(5.25rem,env(safe-area-inset-top,0px))] text-center sm:pt-[5.75rem]"
                 >
-                    <img
-                        src={headshot}
-                        alt="Georgia Martinez"
-                        className="size-36 rounded-full object-cover shadow-[0_8px_32px_rgba(0,0,0,0.5)] ring-4 ring-ion-400/35 ring-offset-4 ring-offset-transparent sm:size-44"
-                    />
+                    <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-10 sm:gap-12 translate-y-[var(--hero-diamond-nudge)]">
+                        <img
+                            src={headshot}
+                            alt="Georgia Martinez"
+                            className="size-36 rounded-full object-cover shadow-[0_8px_32px_rgba(0,0,0,0.5)] ring-1 ring-white/45 ring-offset-1 ring-offset-transparent sm:size-44"
+                        />
 
-                    <div className="max-w-xl space-y-2 sm:space-y-3">
-                        <h1 className="text-gradient-ion text-balance font-heading text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">
-                            Georgia Martinez
-                        </h1>
-                        <p className="text-pretty text-xl text-zinc-300 sm:text-2xl">
-                            Full Stack Software Engineer
-                        </p>
-                    </div>
+                        <div className="max-w-xl space-y-2 sm:space-y-3">
+                            <h1 className="text-gradient-ion text-balance font-heading text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">
+                                Georgia Martinez
+                            </h1>
+                            <p className="text-pretty text-xl text-zinc-300 sm:text-2xl">
+                                Full Stack Software Engineer
+                            </p>
+                        </div>
 
-                    <div className="flex items-center gap-5">
-                        <a
-                            href={LINKEDIN_URL}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex size-14 items-center justify-center rounded-full border border-white/15 bg-white/8 text-zinc-100 shadow-lg transition-colors hover:border-coral/50 hover:bg-coral hover:text-space-void focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ion-400"
-                            aria-label="Georgia Martinez on LinkedIn"
-                        >
-                            <LinkedInIcon className="size-7 origin-center scale-[0.82]" />
-                        </a>
-                        <a
-                            href={GITHUB_URL}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex size-14 items-center justify-center rounded-full border border-white/15 bg-white/8 text-zinc-100 shadow-lg transition-colors hover:border-coral/50 hover:bg-coral hover:text-space-void focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ion-400"
-                            aria-label="Georgia Martinez on GitHub"
-                        >
-                            <GitHubIcon className="size-7 origin-center scale-[1.1]" />
-                        </a>
+                        <div className="flex items-center gap-5">
+                            <a
+                                href={RESUME_URL}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className={HERO_RESUME_LINK}
+                            >
+                                Resume
+                            </a>
+                            <a
+                                href={LINKEDIN_URL}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className={HERO_SOCIAL_ICON_LINK}
+                                aria-label="Georgia Martinez on LinkedIn"
+                            >
+                                <LinkedInIcon className="size-7 origin-center scale-[0.82]" />
+                            </a>
+                            <a
+                                href={GITHUB_URL}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className={HERO_SOCIAL_ICON_LINK}
+                                aria-label="Georgia Martinez on GitHub"
+                            >
+                                <GitHubIcon className="size-7 origin-center scale-[1.1]" />
+                            </a>
+                        </div>
                     </div>
                 </section>
 
                 <section id="about" className={`scroll-mt-20 ${SECTION_SHELL}`}>
                     <div className={SECTION_INNER}>
-                        <h2 className="font-heading text-2xl font-semibold tracking-tight text-zinc-100 sm:text-3xl">
+                        <h2 className="font-heading text-2xl font-semibold tracking-tight text-section-gold sm:text-3xl">
                             Howdy! 👋🏼
                         </h2>
                         <div className="mt-6 space-y-4 text-base leading-relaxed text-zinc-300 sm:text-lg">
@@ -441,7 +461,7 @@ function App() {
                     <div className={SECTION_INNER}>
                         <h2
                             id="projects-heading"
-                            className="font-heading text-2xl font-semibold tracking-tight text-zinc-100 sm:text-3xl"
+                            className="font-heading text-2xl font-semibold tracking-tight text-section-gold sm:text-3xl"
                         >
                             Projects 👩🏻‍💻
                         </h2>
