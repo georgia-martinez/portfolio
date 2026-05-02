@@ -5,12 +5,13 @@ import cohortfinderThumb from "./assets/cohortfinder.png";
 import headshot from "./assets/headshot.png";
 import mandarinThumb from "./assets/mandarin.png";
 import omnichordDemoVideo from "./assets/omnichord_demo.mp4";
+import resumePdf from "./assets/georgia_martinez_resume.pdf";
 import wikidashThumb from "./assets/wikidash.png";
 
 const LINKEDIN_URL = "https://www.linkedin.com/in/georgia-martinez-5bb4a8197/";
 const GITHUB_URL = "https://github.com/georgia-martinez";
-/** PDF in `public/` — respects Vite `base` on GitHub Pages */
-const RESUME_URL = `${import.meta.env.BASE_URL}resume.pdf`;
+/** Bundled PDF — Vite resolves URL including `base` for GitHub Pages */
+const RESUME_URL = resumePdf;
 
 /** Returns embeddable video id for youtube.com / youtu.be URLs, else null */
 function youtubeVideoIdFromUrl(url: string): string | null {
