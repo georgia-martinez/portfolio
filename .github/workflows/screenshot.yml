@@ -27,7 +27,7 @@ jobs:
 
             - name: Take screenshot
               run: |
-                  cat > screenshot.js << 'SCRIPT'
+                  cat > screenshot.cjs << 'SCRIPT'
                   const { chromium } = require('playwright');
                   (async () => {
                     const browser = await chromium.launch();
@@ -38,7 +38,7 @@ jobs:
                     await browser.close();
                   })().catch(err => { console.error(err); process.exit(1); });
                   SCRIPT
-                  node screenshot.js
+                  node screenshot.cjs
 
             - name: Commit and push if changed
               run: |
