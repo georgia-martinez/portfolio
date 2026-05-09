@@ -1,0 +1,48 @@
+name: Update OG Preview Screenshot
+
+on:
+    workflow_run:
+        workflows: ["Deploy GitHub Pages"]
+        types: [completed]
+
+permissions:
+    contents: write
+
+jobs:
+    screenshot:
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: '22'
+
+            - name: Install Playwright
+              run: npm install --no-save playwright && npx playwright install chromium --with-deps
+
+            - name: Wait for CDN propagation
+              run: sleep 30
+
+            - name: Take screenshot
+              run: |
+                  cat > /tmp/screenshot.js << 'SCRIPT'
+                  const { chromium } = require('playwright');
+                  (async () => {
+                    const browser = await chromium.launch();
+                    const page = await browser.newPage();
+                    await page.setViewportSize({ width: 1200, height: 627 });
+                    await page.goto('https://georgia-martinez.github.io/', { waitUntil: 'networkidle' });
+                    await page.screenshot({ path: 'public/preview.png' });
+                    await browser.close();
+                  })().catch(err => { console.error(err); process.exit(1); });
+                  SCRIPT
+                  node /tmp/screenshot.js
+
+            - name: Commit and push if changed
+              run: |
+                  git config user.name "github-actions[bot]"
+                  git config user.email "github-actions[bot]@users.noreply.github.com"
+                  git add public/preview.png
+                  git diff --staged --quiet || (git commit -m "chore: update OG preview screenshot" && git push)
